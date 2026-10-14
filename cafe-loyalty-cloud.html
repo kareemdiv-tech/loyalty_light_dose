@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>جرعة خفيفة | Light Dose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Lalezar&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Bengali:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f6e8c9; --muted:#c0a77a; --paper:#241203; --card:#3a250e; --line:#6a4a1f;
+  --mint:#e5ab3a; --mint-soft:rgba(229,171,58,.15); --amber:#f6e8c9; --amber-soft:#4b3412; --danger:#ff9078; --gold:#e5ab3a; --dark:#241203;
+  --r:14px;
+}
+:root{--mint-d:#c98f22;
+/* ⬇️ اللوجو: انسخ من ملفك القديم الجزء اللي أوله --logo:url("data:image/png;base64, وآخره ") وحطه هنا مكان السطر ده. لو سبته فاضي الصفحة تشتغل بدون لوجو. */
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"IBM Plex Sans Arabic","Noto Sans Devanagari","Noto Sans Bengali",Tahoma,Arial,sans-serif;background:var(--paper);color:var(--ink);font-size:16px;line-height:1.6;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);min-height:100vh}
+.hidden{display:none!important}
+button,input{font:inherit;color:inherit}
+input{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:none}
+input:focus-visible{border-color:var(--mint);box-shadow:0 0 0 3px var(--mint-soft)}
+button{min-height:48px;padding:10px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:var(--mint);color:#fff}
+button:hover{background:var(--mint-d)}
+button:focus-visible,.tab:focus-visible,.row:focus-visible,a.lnk:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+button.ghost:hover{background:var(--mint-soft)}
+button.danger{background:transparent;color:var(--danger);border:1.5px solid #e6c4bd}
+button.gift{background:var(--amber);color:#2b1f05}
+button.gift:hover{background:#c98d22}
+label{display:block;font-weight:500;margin:14px 0 6px}
+.wrap{max-width:520px;margin:0 auto;padding:20px 16px 40px}
+.brand{text-align:center;padding:28px 0 8px}
+.brand h1{margin:0;font-size:28px;font-weight:700}
+.brand p{margin:4px 0 0;color:var(--muted)}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:20px;margin-top:18px}
+.panel h2{margin:0 0 4px;font-size:20px}
+.panel .sub{margin:0 0 6px;color:var(--muted);font-size:15px}
+.panel button.main{width:100%;margin-top:18px}
+.links{display:flex;justify-content:space-between;gap:10px;margin-top:14px;font-size:15px}
+a.lnk{color:var(--mint-d);cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:6px 0;min-height:0;font-weight:500}
+a.lnk:hover{background:none}
+.err{color:var(--danger);min-height:24px;margin-top:10px;font-size:15px}
+.code{letter-spacing:.5em;text-align:center;font-size:22px;direction:ltr}
+.ltr{direction:ltr;text-align:left}
+html[dir=rtl] .ltr::placeholder{text-align:right}
+/* app */
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 6px}
+.top b{font-size:20px}
+.tabs{display:flex;gap:6px;background:#e9efec;border-radius:14px;padding:5px;margin:8px 0 4px}
+.tab{flex:1;min-height:44px;padding:8px 4px;font-size:15px;white-space:nowrap;background:transparent;color:var(--muted);border-radius:10px;font-weight:700}
+.tab:hover{background:rgba(255,255,255,.6)}
+.tab[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.srow{display:flex;gap:8px}
+.srow button{flex:none}
+.card{margin-top:18px;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:18px}
+.card.free{border-color:var(--amber);background:var(--amber-soft)}
+.who{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.who b{font-size:20px}
+.who span{color:var(--muted)}
+.cups{display:flex;gap:10px;margin:18px 0 6px;align-items:center}
+.cup{width:48px;height:48px;border-radius:50%;border:2px dashed #b9c8c2;display:grid;place-items:center;color:#b9c8c2;transition:background .2s,color .2s,border-color .2s}
+.cup.on{background:var(--mint);border:2px solid var(--mint);color:#fff}
+.cup.gift{border-color:var(--amber);color:var(--amber);margin-inline-start:auto}
+.cup.gift.on{background:var(--amber);color:#2b1f05;border-color:var(--amber)}
+.cup svg{width:26px;height:26px}
+.state{margin:6px 0 14px;color:var(--muted)}
+.card.free .state{color:#6b4b08;font-weight:700}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.acts .wide{grid-column:1/-1}
+.empty{margin-top:18px;color:var(--muted);text-align:center;padding:26px 10px;border:1.5px dashed var(--line);border-radius:var(--r)}
+.list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:start;width:100%;min-height:60px;color:var(--ink);font-weight:400}
+.row:hover{background:var(--mint-soft)}
+.row .nm{font-weight:700;display:block}
+.row .ph{color:var(--muted);font-size:14px;display:block}
+.row .meta{margin-inline-start:auto;text-align:end;font-size:14px;color:var(--muted)}
+.badge{display:inline-block;background:var(--amber);color:#2b1f05;border-radius:99px;padding:1px 10px;font-weight:700;font-size:13px}
+.count{color:var(--muted);margin-top:14px;font-size:15px}
+#toast{position:fixed;inset-inline:16px;bottom:calc(20px + env(safe-area-inset-bottom,0));max-width:488px;margin:0 auto;background:var(--ink);color:#fff;padding:14px 16px;border-radius:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s,transform .2s;z-index:10}
+#toast.show{opacity:1;transform:none}
+#toast.bad{background:var(--danger)}
+
+/* ===== هوية جرعة خفيفة ===== */
+.stats{display:flex;gap:18px;margin:0 0 16px;padding-top:10px;border-top:1.5px solid var(--line);color:var(--muted);font-size:15px}
+.stats b{color:var(--ink)}
+body{background:radial-gradient(120% 70% at 50% 0%,#3b2208 0%,#241203 55%,#1a0c02 100%) fixed}
+body::before{content:"";position:fixed;inset:10px;border:2px dashed rgba(229,171,58,.55);border-radius:12px;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1}
+h1,h2,.brand h1{font-family:"Lalezar","IBM Plex Sans Arabic","Noto Sans Devanagari","Noto Sans Bengali",sans-serif;font-weight:400;letter-spacing:.01em}
+.panel h2{font-size:26px;color:var(--gold)}
+.logo{width:112px;aspect-ratio:240/292;margin:0 auto;background:var(--logo,none) center/contain no-repeat}
+.brand{padding:26px 0 4px}
+.brand h1{font-size:38px;color:var(--gold);margin-top:10px;line-height:1.2}
+.brand .en{margin:2px 0 0;letter-spacing:.32em;font-weight:700;color:var(--ink);font-size:14px;direction:ltr}
+.dots{display:flex;gap:7px;justify-content:center;margin:12px 0 0}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.dots i:nth-child(2){transform:scale(1.35)}
+input{background:#1b0d02;color:var(--ink);border-color:var(--line)}
+input::placeholder{color:#8d7650}
+button{color:var(--dark)}
+button.ghost{color:var(--ink);border-color:var(--line)}
+button.danger{color:var(--danger);border-color:#7a3b2c}
+button.gift{background:var(--amber);color:var(--dark)}
+button.gift:hover{background:#e6d3a8}
+.tabs{background:#1b0d02;border:1.5px solid var(--line)}
+.tab{color:var(--muted)}
+.tab:hover{background:rgba(229,171,58,.1)}
+.tab[aria-selected=true]{background:var(--gold);color:var(--dark);box-shadow:none}
+.cup{border-color:#7b5a2a;color:#7b5a2a}
+.cup.on{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.cup.gift{border-color:var(--amber);color:var(--amber)}
+.cup.gift.on{background:var(--amber);color:var(--dark);border-color:var(--amber)}
+.card.free{border-color:var(--gold)}
+.card.free .state{color:var(--gold)}
+.row{background:var(--card);color:var(--ink)}
+.badge{background:var(--gold);color:var(--dark)}
+.top{gap:12px;justify-content:flex-start}
+.top .logo{width:42px;margin:0;flex:none}
+.top b{font-family:"Lalezar","IBM Plex Sans Arabic","Noto Sans Devanagari","Noto Sans Bengali",sans-serif;font-weight:400;font-size:26px;color:var(--gold);line-height:1.1}
+.top small{display:block;letter-spacing:.28em;font-size:11px;color:var(--ink)}
+#toast{background:var(--amber);color:var(--dark)}
+#toast.bad{background:#ff9078;color:#2a0d05}
+
+.langbar{display:flex;justify-content:flex-end;padding-top:14px;position:relative;z-index:2}
+.langbar select{width:auto;min-width:132px;min-height:44px;padding:6px 12px;border-radius:12px;background:#1b0d02;color:var(--ink);border:1.5px solid var(--line);cursor:pointer}
+html[lang=ur] body{font-family:"Noto Naskh Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;line-height:1.85}
+html[lang=hi] body,html[lang=bn] body{line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 9h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v2M12 3v2"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></symbol>
+</svg>
+
+<div class="wrap">
+  <div class="langbar"><select id="lang" aria-label="Language / اللغة"></select></div>
+
+  <!-- تحميل -->
+  <div id="vLoad" class="brand"><div class="logo" role="img" aria-label="جرعة خفيفة Light Dose"></div><h1 id="loadName">جرعة خفيفة</h1><p class="en">LIGHT DOSE</p><p style="color:var(--muted)" data-i18n="wait">لحظة...</p></div>
+
+  <!-- الدخول والتسجيل -->
+  <div id="vAuth" class="hidden">
+    <div class="brand"><div class="logo" role="img" aria-label="جرعة خفيفة Light Dose"></div><h1 class="cafeName">جرعة خفيفة</h1><p class="en">LIGHT DOSE</p><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div></div>
+
+    <form class="panel" id="pSignup" autocomplete="on">
+      <h2 data-i18n="signupTitle">إنشاء حساب</h2>
+      <p class="sub" data-i18n="signupSub">سجّل بإيميلك. هيوصلك كود تأكيد عليه.</p>
+      <label for="suEmail" data-i18n="email">الإيميل</label>
+      <input id="suEmail" type="email" class="ltr" inputmode="email" autocomplete="email" placeholder="name@gmail.com" required>
+      <label for="suPass" data-i18n="pass6">كلمة السر (6 حروف على الأقل)</label>
+      <input id="suPass" type="password" class="ltr" autocomplete="new-password" required>
+      <label for="suPass2" data-i18n="pass2">أعد كتابة كلمة السر</label>
+      <input id="suPass2" type="password" class="ltr" autocomplete="new-password" required>
+      <div class="err" id="suErr" role="alert"></div>
+      <button class="main" type="submit" id="suBtn" data-i18n="sendCode">إرسال الكود</button>
+      <div class="links"><a class="lnk" role="button" tabindex="0" data-go="pLogin" data-i18n="loginLink">تسجيل الدخول</a></div>
+    </form>
+
+    <form class="panel hidden" id="pSignupCode">
+      <h2 data-i18n="codeTitle">أدخل كود التأكيد</h2>
+      <p class="sub" id="scSub"></p>
+      <label for="scCode" data-i18n="code6">الكود (6 أرقام)</label>
+      <input id="scCode" class="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required>
+      <div class="err" id="scErr" role="alert"></div>
+      <button class="main" type="submit" id="scBtn" data-i18n="confirmSignup">تأكيد وإنشاء الحساب</button>
+      <div class="links"><a class="lnk" role="button" tabindex="0" data-go="pSignup" data-i18n="back">رجوع</a></div>
+    </form>
+
+    <form class="panel hidden" id="pLogin">
+      <h2 data-i18n="loginTitle">تسجيل الدخول</h2>
+      <label for="liEmail" data-i18n="email">الإيميل</label>
+      <input id="liEmail" type="email" class="ltr" inputmode="email" autocomplete="username" placeholder="name@gmail.com" required>
+      <label for="liPass" data-i18n="password">كلمة السر</label>
+      <input id="liPass" type="password" class="ltr" autocomplete="current-password" required>
+      <div class="err" id="liErr" role="alert"></div>
+      <button class="main" type="submit" id="liBtn" data-i18n="login">دخول</button>
+      <div class="links">
+        <a class="lnk" role="button" tabindex="0" data-go="pForgot" data-i18n="forgotLink">نسيت كلمة السر؟</a>
+        <a class="lnk" role="button" tabindex="0" data-go="pSignup" data-i18n="signupLink">إنشاء حساب</a>
+      </div>
+    </form>
+
+    <form class="panel hidden" id="pForgot">
+      <h2 data-i18n="forgotTitle">نسيت كلمة السر</h2>
+      <p class="sub" data-i18n="forgotSub">اكتب إيميلك وهنبعتلك كود لاختيار كلمة سر جديدة.</p>
+      <label for="fgEmail" data-i18n="email">الإيميل</label>
+      <input id="fgEmail" type="email" class="ltr" inputmode="email" autocomplete="email" placeholder="name@gmail.com" required>
+      <div class="err" id="fgErr" role="alert"></div>
+      <button class="main" type="submit" id="fgBtn" data-i18n="sendCode">إرسال الكود</button>
+      <div class="links"><a class="lnk" role="button" tabindex="0" data-go="pLogin" data-i18n="backLogin">رجوع لتسجيل الدخول</a></div>
+    </form>
+
+    <form class="panel hidden" id="pReset">
+      <h2 data-i18n="resetTitle">كلمة سر جديدة</h2>
+      <p class="sub" id="rsSub"></p>
+      <label for="rsCode" data-i18n="code6">الكود (6 أرقام)</label>
+      <input id="rsCode" class="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required>
+      <label for="rsPass" data-i18n="newPass6">كلمة السر الجديدة (6 حروف على الأقل)</label>
+      <input id="rsPass" type="password" class="ltr" autocomplete="new-password" required>
+      <div class="err" id="rsErr" role="alert"></div>
+      <button class="main" type="submit" id="rsBtn" data-i18n="saveLogin">حفظ ودخول</button>
+      <div class="links"><a class="lnk" role="button" tabindex="0" data-go="pForgot" data-i18n="back">رجوع</a></div>
+    </form>
+  </div>
+
+  <!-- التطبيق -->
+  <div id="vApp" class="hidden">
+    <div class="top"><div class="logo" role="img" aria-label="Light Dose"></div><div><b class="cafeName">جرعة خفيفة</b><small>LIGHT DOSE</small></div></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="tSearch" aria-selected="true" data-i18n="tabSearch">بحث وإضافة</button>
+      <button class="tab" role="tab" data-tab="tList" aria-selected="false" data-i18n="tabList">العملاء</button>
+      <button class="tab" role="tab" data-tab="tAcc" aria-selected="false" data-i18n="tabAcc">حسابي</button>
+    </div>
+
+    <section id="tSearch">
+      <form class="srow" id="fSearch" style="margin-top:14px">
+        <input id="q" type="tel" class="ltr" inputmode="tel" placeholder="رقم موبايل العميل" aria-label="رقم موبايل العميل" data-ph="phonePh" data-aria="phonePh" autocomplete="off">
+        <button type="submit" id="qBtn" data-i18n="search">بحث</button>
+      </form>
+      <div id="result"><div class="empty" data-i18n="emptySearchLong">اكتب رقم العميل وابحث. لو مش مسجل هتقدر تسجله وتحسبله كوباية في خطوة واحدة.</div></div>
+    </section>
+
+    <section id="tList" class="hidden">
+      <input id="lf" type="search" style="margin-top:14px" placeholder="ابحث بالاسم أو الرقم" aria-label="ابحث في العملاء" data-ph="listPh" data-aria="listPh" autocomplete="off">
+      <div class="count" id="lcount"></div>
+      <div class="list" id="llist"></div>
+    </section>
+
+    <section id="tAcc" class="hidden">
+      <form class="panel" id="pChange">
+        <h2 data-i18n="changeTitle">تغيير كلمة السر</h2>
+        <label for="cpOld" data-i18n="curPass">كلمة السر الحالية</label>
+        <input id="cpOld" type="password" class="ltr" autocomplete="current-password" required>
+        <label for="cpNew" data-i18n="newPass6">كلمة السر الجديدة (6 حروف على الأقل)</label>
+        <input id="cpNew" type="password" class="ltr" autocomplete="new-password" required>
+        <div class="err" id="cpErr" role="alert"></div>
+        <button class="main" type="submit" id="cpBtn" data-i18n="save">حفظ</button>
+      </form>
+      <button class="ghost" id="outBtn" style="width:100%;margin-top:18px" data-i18n="logout">تسجيل الخروج</button>
+    </section>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ضع هنا رابط الـ Web app اللي طلع من Deploy */
+const API_URL = 'https://script.google.com/macros/s/AKfycbxkt318zuA6VjQr3vO3Ygmk-bcfDZuKLX_4J0yOC5rz85ZIEeMp6NUcctaIQXCo3IfXdA/exec';
+const NEED = 5;
+const RTL = ['ar', 'ur'];
+const LANGS = { ar:'العربية', en:'English', ur:'اردو', hi:'हिन्दी', bn:'বাংলা', fil:'Filipino' };
+
+const I18N = {
+ar:{
+ wait:"لحظة...", signupTitle:"إنشاء حساب", signupSub:"سجّل بإيميلك. هيوصلك كود تأكيد عليه.", email:"الإيميل",
+ pass6:"كلمة السر (6 حروف على الأقل)", pass2:"أعد كتابة كلمة السر", sendCode:"إرسال الكود", codeTitle:"أدخل كود التأكيد",
+ code6:"الكود (6 أرقام)", confirmSignup:"تأكيد وإنشاء الحساب", back:"رجوع", loginTitle:"تسجيل الدخول", password:"كلمة السر",
+ login:"دخول", forgotLink:"نسيت كلمة السر؟", forgotTitle:"نسيت كلمة السر", forgotSub:"اكتب إيميلك وهنبعتلك كود لاختيار كلمة سر جديدة.",
+ backLogin:"رجوع لتسجيل الدخول", resetTitle:"كلمة سر جديدة", newPass6:"كلمة السر الجديدة (6 حروف على الأقل)", saveLogin:"حفظ ودخول",
+ signupLink:"إنشاء حساب", loginLink:"تسجيل الدخول",
+ tabSearch:"بحث وإضافة", tabList:"العملاء", tabAcc:"حسابي", phonePh:"رقم موبايل العميل", search:"بحث",
+ emptySearchLong:"اكتب رقم العميل وابحث. لو مش مسجل هتقدر تسجله وتحسبله كوباية في خطوة واحدة.", emptySearch:"اكتب رقم العميل وابحث.",
+ listPh:"ابحث بالاسم أو الرقم", changeTitle:"تغيير كلمة السر", curPass:"كلمة السر الحالية", save:"حفظ", logout:"تسجيل الخروج",
+ passMismatch:"كلمتي السر مش متطابقتين.", scSub:"بعتنا كود على {email}. شوف الـ Spam لو ماوصلش.",
+ rsSub:"لو الإيميل {email} مسجل عندنا، هيوصله كود. شوف الـ Spam لو ماوصلش.", left:"باقي {n} محاولات.",
+ pwChanged:"تم تغيير كلمة السر.", sessionExpired:"انتهت الجلسة. سجّل الدخول تاني.", setApi:"ضع رابط الـ Web app في API_URL داخل الملف.",
+ free:"عنده هدية جاهزة. الكوباية دي عليك.", progress1:"اتحسب {s} من {n}. باقي كوباية واحدة للهدية.", progressN:"اتحسب {s} من {n}. باقي {left} كبايات للهدية.",
+ totalCups:"إجمالي الكبايات", gifts:"الهدايا", remove:"حذف العميل", addCup:"إضافة كوباية", claim:"تسليم الهدية", undo:"تراجع عن آخر كوباية",
+ newCust:"عميل جديد", newCustSub:"الرقم ده مش مسجل. اكتب الاسم وسجّله مع أول كوباية.", custName:"اسم العميل", registerCup:"تسجيل + كوباية",
+ registered:"تم تسجيل {name} وإضافة كوباية.", confirmDel:"حذف {name} نهائيًا؟", noCupsUndo:"مفيش كبايات للتراجع عنها.", deleted:"تم حذف {name}.",
+ reachedGift:"تمام. العميل وصل للهدية!", cupAdded:"تمت إضافة كوباية.", giftGiven:"تم تسليم الهدية.", undone:"تم التراجع.",
+ count:"عدد العملاء: {n}", results:"النتائج: {n}", noResults:"مفيش نتايج.", noCustomers:"لسه مفيش عملاء. ابدأ من تبويب “بحث وإضافة”.",
+ badgeGift:"هدية جاهزة", totalShort:"إجمالي {n}",
+ e_network:"مفيش اتصال بالسيرفر. اتأكد من النت وجرّب تاني.", e_server:"حصلت مشكلة في السيرفر. جرّب تاني بعد شوية.", e_bad_request:"حصلت مشكلة في الطلب. جرّب تاني.",
+ e_bad_email:"الإيميل مش صحيح.", e_weak_password:"كلمة السر لازم 6 حروف على الأقل.", e_not_allowed:"الإيميل ده مش مسموح له بالتسجيل.",
+ e_already_registered:"الحساب متسجل بالفعل. سجّل الدخول.", e_too_many:"محاولات كتير. استنى شوية وجرّب تاني.", e_code_expired:"الكود انتهى أو مش موجود. اطلب كود جديد.",
+ e_bad_code:"الكود غلط.", e_bad_login:"الإيميل أو كلمة السر غلط.", e_locked:"الحساب مقفول مؤقتًا بسبب محاولات غلط. جرّب بعد 5 دقايق.",
+ e_not_configured:"الحساب لسه مش متعمل.", e_bad_password:"كلمة السر الحالية غلط.", e_free_ready:"العميل عنده هدية جاهزة. سلّمه الهدية الأول.",
+ e_not_free:"العميل ملوش هدية جاهزة.", e_not_found:"العميل مش موجود.", e_name:"اكتب اسم العميل.", e_phone:"اكتب رقم الموبايل.",
+ e_exists:"العميل مسجل بالفعل. ابحث عنه تاني.", e_generic:"حصلت مشكلة. جرّب تاني.",
+ e_disabled:"الحساب موقوف. تواصل مع الدعم.", e_plan_expired:"انتهى الاشتراك. تواصل مع الدعم."
+},
+en:{
+ wait:"Please wait...", signupTitle:"Create account", signupSub:"Sign up with your email. We will send you a confirmation code.", email:"Email",
+ pass6:"Password (at least 6 characters)", pass2:"Repeat password", sendCode:"Send code", codeTitle:"Enter confirmation code",
+ code6:"Code (6 digits)", confirmSignup:"Confirm and create account", back:"Back", loginTitle:"Log in", password:"Password",
+ login:"Log in", forgotLink:"Forgot password?", forgotTitle:"Forgot password", forgotSub:"Enter your email and we will send you a code to choose a new password.",
+ backLogin:"Back to log in", resetTitle:"New password", newPass6:"New password (at least 6 characters)", saveLogin:"Save and log in",
+ signupLink:"Create account", loginLink:"Log in",
+ tabSearch:"Search & add", tabList:"Customers", tabAcc:"Account", phonePh:"Customer mobile number", search:"Search",
+ emptySearchLong:"Enter the customer's number and search. If they are not registered, you can register them and add a cup in one step.", emptySearch:"Enter the customer's number and search.",
+ listPh:"Search by name or number", changeTitle:"Change password", curPass:"Current password", save:"Save", logout:"Log out",
+ passMismatch:"The two passwords do not match.", scSub:"We sent a code to {email}. Check your Spam folder if it does not arrive.",
+ rsSub:"If {email} is registered, a code will be sent to it. Check Spam if it does not arrive.", left:"{n} attempts left.",
+ pwChanged:"Password changed.", sessionExpired:"Session expired. Please log in again.", setApi:"Put the Web app link in API_URL inside the file.",
+ free:"Has a free gift ready. This cup is on the house.", progress1:"Counted {s} of {n}. 1 cup left for the gift.", progressN:"Counted {s} of {n}. {left} cups left for the gift.",
+ totalCups:"Total cups", gifts:"Gifts", remove:"Delete customer", addCup:"Add a cup", claim:"Give the gift", undo:"Undo last cup",
+ newCust:"New customer", newCustSub:"This number is not registered. Enter the name and register with the first cup.", custName:"Customer name", registerCup:"Register + cup",
+ registered:"{name} registered and a cup added.", confirmDel:"Delete {name} permanently?", noCupsUndo:"No cups to undo.", deleted:"{name} deleted.",
+ reachedGift:"Done. The customer reached the gift!", cupAdded:"Cup added.", giftGiven:"Gift given.", undone:"Undone.",
+ count:"Customers: {n}", results:"Results: {n}", noResults:"No results.", noCustomers:"No customers yet. Start from the “Search & add” tab.",
+ badgeGift:"Gift ready", totalShort:"Total {n}",
+ e_network:"No connection to the server. Check your internet and try again.", e_server:"A server problem occurred. Try again shortly.", e_bad_request:"Something went wrong with the request. Try again.",
+ e_bad_email:"The email is not valid.", e_weak_password:"Password must be at least 6 characters.", e_not_allowed:"This email is not allowed to register.",
+ e_already_registered:"The account is already registered. Log in.", e_too_many:"Too many attempts. Wait a bit and try again.", e_code_expired:"The code expired or does not exist. Request a new one.",
+ e_bad_code:"Wrong code.", e_bad_login:"Wrong email or password.", e_locked:"The account is temporarily locked after wrong attempts. Try again in 5 minutes.",
+ e_not_configured:"The account has not been created yet.", e_bad_password:"The current password is wrong.", e_free_ready:"The customer has a gift ready. Give the gift first.",
+ e_not_free:"The customer has no gift ready.", e_not_found:"Customer not found.", e_name:"Enter the customer's name.", e_phone:"Enter the mobile number.",
+ e_exists:"The customer is already registered. Search again.", e_generic:"Something went wrong. Try again.",
+ e_disabled:"The account is suspended. Contact support.", e_plan_expired:"The subscription has expired. Contact support."
+},
+ur:{
+ wait:"براہِ کرم انتظار کریں...", signupTitle:"اکاؤنٹ بنائیں", signupSub:"اپنے ای میل سے رجسٹر کریں۔ ہم آپ کو تصدیقی کوڈ بھیجیں گے۔", email:"ای میل",
+ pass6:"پاس ورڈ (کم از کم 6 حروف)", pass2:"پاس ورڈ دوبارہ لکھیں", sendCode:"کوڈ بھیجیں", codeTitle:"تصدیقی کوڈ درج کریں",
+ code6:"کوڈ (6 ہندسے)", confirmSignup:"تصدیق کریں اور اکاؤنٹ بنائیں", back:"واپس", loginTitle:"لاگ اِن", password:"پاس ورڈ",
+ login:"لاگ اِن", forgotLink:"پاس ورڈ بھول گئے؟", forgotTitle:"پاس ورڈ بھول گئے", forgotSub:"اپنا ای میل لکھیں، ہم نیا پاس ورڈ چننے کے لیے کوڈ بھیجیں گے۔",
+ backLogin:"لاگ اِن پر واپس", resetTitle:"نیا پاس ورڈ", newPass6:"نیا پاس ورڈ (کم از کم 6 حروف)", saveLogin:"محفوظ کریں اور لاگ اِن ہوں",
+ signupLink:"اکاؤنٹ بنائیں", loginLink:"لاگ اِن کریں",
+ tabSearch:"تلاش اور اضافہ", tabList:"گاہک", tabAcc:"میرا اکاؤنٹ", phonePh:"گاہک کا موبائل نمبر", search:"تلاش",
+ emptySearchLong:"گاہک کا نمبر لکھ کر تلاش کریں۔ اگر وہ رجسٹر نہیں تو ایک ہی قدم میں رجسٹر کر کے کپ شامل کر سکتے ہیں۔", emptySearch:"گاہک کا نمبر لکھ کر تلاش کریں۔",
+ listPh:"نام یا نمبر سے تلاش کریں", changeTitle:"پاس ورڈ تبدیل کریں", curPass:"موجودہ پاس ورڈ", save:"محفوظ کریں", logout:"لاگ آؤٹ",
+ passMismatch:"دونوں پاس ورڈ ایک جیسے نہیں ہیں۔", scSub:"{email} پر کوڈ بھیج دیا گیا ہے۔ نہ آئے تو اسپیم دیکھیں۔",
+ rsSub:"اگر {email} رجسٹرڈ ہے تو اس پر کوڈ بھیجا جائے گا۔ نہ آئے تو اسپیم دیکھیں۔", left:"{n} کوششیں باقی ہیں۔",
+ pwChanged:"پاس ورڈ تبدیل ہو گیا۔", sessionExpired:"سیشن ختم ہو گیا۔ دوبارہ لاگ اِن کریں۔", setApi:"فائل میں API_URL کے اندر Web app کا لنک ڈالیں۔",
+ free:"اس کا مفت تحفہ تیار ہے۔ یہ کپ ہماری طرف سے۔", progress1:"{n} میں سے {s} گنے گئے۔ تحفے کے لیے 1 کپ باقی ہے۔", progressN:"{n} میں سے {s} گنے گئے۔ تحفے کے لیے {left} کپ باقی ہیں۔",
+ totalCups:"کل کپ", gifts:"تحائف", remove:"گاہک حذف کریں", addCup:"کپ شامل کریں", claim:"تحفہ دیں", undo:"آخری کپ واپس لیں",
+ newCust:"نیا گاہک", newCustSub:"یہ نمبر رجسٹر نہیں ہے۔ نام لکھیں اور پہلے کپ کے ساتھ رجسٹر کریں۔", custName:"گاہک کا نام", registerCup:"رجسٹر + کپ",
+ registered:"{name} رجسٹر ہو گیا اور کپ شامل ہو گیا۔", confirmDel:"{name} کو ہمیشہ کے لیے حذف کریں؟", noCupsUndo:"واپس لینے کے لیے کوئی کپ نہیں۔", deleted:"{name} حذف ہو گیا۔",
+ reachedGift:"ٹھیک ہے۔ گاہک تحفے تک پہنچ گیا!", cupAdded:"کپ شامل ہو گیا۔", giftGiven:"تحفہ دے دیا گیا۔", undone:"واپس لے لیا گیا۔",
+ count:"گاہک: {n}", results:"نتائج: {n}", noResults:"کوئی نتیجہ نہیں۔", noCustomers:"ابھی کوئی گاہک نہیں۔ “تلاش اور اضافہ” ٹیب سے شروع کریں۔",
+ badgeGift:"تحفہ تیار", totalShort:"کل {n}",
+ e_network:"سرور سے رابطہ نہیں ہو سکا۔ انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔", e_server:"سرور میں مسئلہ آیا۔ تھوڑی دیر بعد کوشش کریں۔", e_bad_request:"درخواست میں مسئلہ آیا۔ دوبارہ کوشش کریں۔",
+ e_bad_email:"ای میل درست نہیں ہے۔", e_weak_password:"پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے۔", e_not_allowed:"اس ای میل کو رجسٹر کرنے کی اجازت نہیں۔",
+ e_already_registered:"اکاؤنٹ پہلے سے موجود ہے۔ لاگ اِن کریں۔", e_too_many:"بہت زیادہ کوششیں۔ تھوڑا رکیں اور دوبارہ کوشش کریں۔", e_code_expired:"کوڈ کی میعاد ختم ہو گئی یا موجود نہیں۔ نیا کوڈ منگوائیں۔",
+ e_bad_code:"کوڈ غلط ہے۔", e_bad_login:"ای میل یا پاس ورڈ غلط ہے۔", e_locked:"غلط کوششوں کی وجہ سے اکاؤنٹ عارضی طور پر بند ہے۔ 5 منٹ بعد کوشش کریں۔",
+ e_not_configured:"اکاؤنٹ ابھی بنایا نہیں گیا۔", e_bad_password:"موجودہ پاس ورڈ غلط ہے۔", e_free_ready:"گاہک کا تحفہ تیار ہے۔ پہلے تحفہ دیں۔",
+ e_not_free:"گاہک کا کوئی تحفہ تیار نہیں۔", e_not_found:"گاہک نہیں ملا۔", e_name:"گاہک کا نام لکھیں۔", e_phone:"موبائل نمبر لکھیں۔",
+ e_exists:"گاہک پہلے سے رجسٹر ہے۔ دوبارہ تلاش کریں۔", e_generic:"کچھ گڑبڑ ہو گئی۔ دوبارہ کوشش کریں۔",
+ e_disabled:"اکاؤنٹ معطل ہے۔ سپورٹ سے رابطہ کریں۔", e_plan_expired:"سبسکرپشن ختم ہو گئی۔ سپورٹ سے رابطہ کریں۔"
+},
+hi:{
+ wait:"कृपया प्रतीक्षा करें...", signupTitle:"खाता बनाएँ", signupSub:"अपने ईमेल से रजिस्टर करें। हम आपको पुष्टि कोड भेजेंगे।", email:"ईमेल",
+ pass6:"पासवर्ड (कम से कम 6 अक्षर)", pass2:"पासवर्ड दोबारा लिखें", sendCode:"कोड भेजें", codeTitle:"पुष्टि कोड दर्ज करें",
+ code6:"कोड (6 अंक)", confirmSignup:"पुष्टि करें और खाता बनाएँ", back:"वापस", loginTitle:"लॉग इन", password:"पासवर्ड",
+ login:"लॉग इन", forgotLink:"पासवर्ड भूल गए?", forgotTitle:"पासवर्ड भूल गए", forgotSub:"अपना ईमेल लिखें, हम नया पासवर्ड चुनने के लिए कोड भेजेंगे।",
+ backLogin:"लॉग इन पर वापस", resetTitle:"नया पासवर्ड", newPass6:"नया पासवर्ड (कम से कम 6 अक्षर)", saveLogin:"सेव करें और लॉग इन करें",
+ signupLink:"खाता बनाएँ", loginLink:"लॉग इन करें",
+ tabSearch:"खोजें और जोड़ें", tabList:"ग्राहक", tabAcc:"मेरा खाता", phonePh:"ग्राहक का मोबाइल नंबर", search:"खोजें",
+ emptySearchLong:"ग्राहक का नंबर लिखकर खोजें। अगर वह रजिस्टर नहीं है तो एक ही चरण में रजिस्टर करके कप जोड़ सकते हैं।", emptySearch:"ग्राहक का नंबर लिखकर खोजें।",
+ listPh:"नाम या नंबर से खोजें", changeTitle:"पासवर्ड बदलें", curPass:"मौजूदा पासवर्ड", save:"सेव करें", logout:"लॉग आउट",
+ passMismatch:"दोनों पासवर्ड मेल नहीं खाते।", scSub:"{email} पर कोड भेजा गया है। न आए तो स्पैम देखें।",
+ rsSub:"अगर {email} रजिस्टर है तो उस पर कोड भेजा जाएगा। न आए तो स्पैम देखें।", left:"{n} प्रयास बाकी हैं।",
+ pwChanged:"पासवर्ड बदल गया।", sessionExpired:"सत्र समाप्त हो गया। फिर से लॉग इन करें।", setApi:"फ़ाइल में API_URL के अंदर Web app का लिंक डालें।",
+ free:"इनका मुफ़्त उपहार तैयार है। यह कप हमारी तरफ़ से।", progress1:"{n} में से {s} गिने गए। उपहार के लिए 1 कप बाकी है।", progressN:"{n} में से {s} गिने गए। उपहार के लिए {left} कप बाकी हैं।",
+ totalCups:"कुल कप", gifts:"उपहार", remove:"ग्राहक हटाएँ", addCup:"कप जोड़ें", claim:"उपहार दें", undo:"आख़िरी कप वापस लें",
+ newCust:"नया ग्राहक", newCustSub:"यह नंबर रजिस्टर नहीं है। नाम लिखें और पहले कप के साथ रजिस्टर करें।", custName:"ग्राहक का नाम", registerCup:"रजिस्टर + कप",
+ registered:"{name} रजिस्टर हो गया और कप जुड़ गया।", confirmDel:"{name} को हमेशा के लिए हटाएँ?", noCupsUndo:"वापस लेने के लिए कोई कप नहीं।", deleted:"{name} हटा दिया गया।",
+ reachedGift:"ठीक है। ग्राहक उपहार तक पहुँच गया!", cupAdded:"कप जुड़ गया।", giftGiven:"उपहार दे दिया गया।", undone:"वापस ले लिया गया।",
+ count:"ग्राहक: {n}", results:"परिणाम: {n}", noResults:"कोई परिणाम नहीं।", noCustomers:"अभी कोई ग्राहक नहीं। “खोजें और जोड़ें” टैब से शुरू करें।",
+ badgeGift:"उपहार तैयार", totalShort:"कुल {n}",
+ e_network:"सर्वर से कनेक्शन नहीं हो सका। इंटरनेट जाँचें और फिर कोशिश करें।", e_server:"सर्वर में समस्या आई। थोड़ी देर बाद कोशिश करें।", e_bad_request:"अनुरोध में समस्या आई। फिर कोशिश करें।",
+ e_bad_email:"ईमेल सही नहीं है।", e_weak_password:"पासवर्ड कम से कम 6 अक्षर का होना चाहिए।", e_not_allowed:"इस ईमेल को रजिस्टर करने की अनुमति नहीं है।",
+ e_already_registered:"खाता पहले से बना है। लॉग इन करें।", e_too_many:"बहुत ज़्यादा प्रयास। थोड़ा रुकें और फिर कोशिश करें।", e_code_expired:"कोड की समय-सीमा खत्म हो गई या मौजूद नहीं है। नया कोड मँगाएँ।",
+ e_bad_code:"कोड गलत है।", e_bad_login:"ईमेल या पासवर्ड गलत है।", e_locked:"गलत प्रयासों के कारण खाता कुछ समय के लिए बंद है। 5 मिनट बाद कोशिश करें।",
+ e_not_configured:"खाता अभी बना नहीं है।", e_bad_password:"मौजूदा पासवर्ड गलत है।", e_free_ready:"ग्राहक का उपहार तैयार है। पहले उपहार दें।",
+ e_not_free:"ग्राहक का कोई उपहार तैयार नहीं है।", e_not_found:"ग्राहक नहीं मिला।", e_name:"ग्राहक का नाम लिखें।", e_phone:"मोबाइल नंबर लिखें।",
+ e_exists:"ग्राहक पहले से रजिस्टर है। फिर से खोजें।", e_generic:"कुछ गड़बड़ हो गई। फिर कोशिश करें।",
+ e_disabled:"खाता निलंबित है। सहायता से संपर्क करें।", e_plan_expired:"सदस्यता समाप्त हो गई। सहायता से संपर्क करें।"
+},
+bn:{
+ wait:"অনুগ্রহ করে অপেক্ষা করুন...", signupTitle:"অ্যাকাউন্ট খুলুন", signupSub:"আপনার ইমেইল দিয়ে রেজিস্টার করুন। আমরা একটি নিশ্চিতকরণ কোড পাঠাব।", email:"ইমেইল",
+ pass6:"পাসওয়ার্ড (কমপক্ষে 6 অক্ষর)", pass2:"পাসওয়ার্ড আবার লিখুন", sendCode:"কোড পাঠান", codeTitle:"নিশ্চিতকরণ কোড দিন",
+ code6:"কোড (6 সংখ্যা)", confirmSignup:"নিশ্চিত করুন ও অ্যাকাউন্ট খুলুন", back:"পিছনে", loginTitle:"লগ ইন", password:"পাসওয়ার্ড",
+ login:"লগ ইন", forgotLink:"পাসওয়ার্ড ভুলে গেছেন?", forgotTitle:"পাসওয়ার্ড ভুলে গেছি", forgotSub:"আপনার ইমেইল লিখুন, নতুন পাসওয়ার্ড বেছে নিতে আমরা একটি কোড পাঠাব।",
+ backLogin:"লগ ইনে ফিরে যান", resetTitle:"নতুন পাসওয়ার্ড", newPass6:"নতুন পাসওয়ার্ড (কমপক্ষে 6 অক্ষর)", saveLogin:"সেভ করে লগ ইন করুন",
+ signupLink:"অ্যাকাউন্ট খুলুন", loginLink:"লগ ইন করুন",
+ tabSearch:"খুঁজুন ও যোগ করুন", tabList:"গ্রাহক", tabAcc:"আমার অ্যাকাউন্ট", phonePh:"গ্রাহকের মোবাইল নম্বর", search:"খুঁজুন",
+ emptySearchLong:"গ্রাহকের নম্বর লিখে খুঁজুন। রেজিস্টার করা না থাকলে এক ধাপেই রেজিস্টার করে কাপ যোগ করতে পারবেন।", emptySearch:"গ্রাহকের নম্বর লিখে খুঁজুন।",
+ listPh:"নাম বা নম্বর দিয়ে খুঁজুন", changeTitle:"পাসওয়ার্ড বদলান", curPass:"বর্তমান পাসওয়ার্ড", save:"সেভ করুন", logout:"লগ আউট",
+ passMismatch:"দুটি পাসওয়ার্ড মেলেনি।", scSub:"{email} ঠিকানায় কোড পাঠানো হয়েছে। না এলে স্প্যাম দেখুন।",
+ rsSub:"{email} রেজিস্টার করা থাকলে সেখানে কোড যাবে। না এলে স্প্যাম দেখুন।", left:"আর {n}টি চেষ্টা বাকি।",
+ pwChanged:"পাসওয়ার্ড বদলানো হয়েছে।", sessionExpired:"সেশন শেষ হয়ে গেছে। আবার লগ ইন করুন।", setApi:"ফাইলের ভিতরে API_URL-এ Web app-এর লিংক বসান।",
+ free:"তার ফ্রি উপহার তৈরি। এই কাপটি আমাদের পক্ষ থেকে।", progress1:"{n}-এর মধ্যে {s}টি গোনা হয়েছে। উপহারের জন্য আর 1টি কাপ বাকি।", progressN:"{n}-এর মধ্যে {s}টি গোনা হয়েছে। উপহারের জন্য আর {left}টি কাপ বাকি।",
+ totalCups:"মোট কাপ", gifts:"উপহার", remove:"গ্রাহক মুছুন", addCup:"কাপ যোগ করুন", claim:"উপহার দিন", undo:"শেষ কাপ ফিরিয়ে নিন",
+ newCust:"নতুন গ্রাহক", newCustSub:"এই নম্বর রেজিস্টার করা নেই। নাম লিখুন এবং প্রথম কাপসহ রেজিস্টার করুন।", custName:"গ্রাহকের নাম", registerCup:"রেজিস্টার + কাপ",
+ registered:"{name} রেজিস্টার হয়েছে এবং কাপ যোগ হয়েছে।", confirmDel:"{name}-কে চিরতরে মুছে ফেলবেন?", noCupsUndo:"ফিরিয়ে নেওয়ার মতো কোনো কাপ নেই।", deleted:"{name} মুছে ফেলা হয়েছে।",
+ reachedGift:"ঠিক আছে। গ্রাহক উপহারে পৌঁছে গেছে!", cupAdded:"কাপ যোগ হয়েছে।", giftGiven:"উপহার দেওয়া হয়েছে।", undone:"ফিরিয়ে নেওয়া হয়েছে।",
+ count:"গ্রাহক: {n}", results:"ফলাফল: {n}", noResults:"কোনো ফলাফল নেই।", noCustomers:"এখনও কোনো গ্রাহক নেই। “খুঁজুন ও যোগ করুন” ট্যাব থেকে শুরু করুন।",
+ badgeGift:"উপহার তৈরি", totalShort:"মোট {n}",
+ e_network:"সার্ভারের সাথে সংযোগ হয়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।", e_server:"সার্ভারে সমস্যা হয়েছে। একটু পরে আবার চেষ্টা করুন।", e_bad_request:"অনুরোধে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+ e_bad_email:"ইমেইল সঠিক নয়।", e_weak_password:"পাসওয়ার্ড কমপক্ষে 6 অক্ষরের হতে হবে।", e_not_allowed:"এই ইমেইল দিয়ে রেজিস্টার করা যাবে না।",
+ e_already_registered:"অ্যাকাউন্ট আগেই খোলা হয়েছে। লগ ইন করুন।", e_too_many:"অনেক বেশি চেষ্টা হয়েছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।", e_code_expired:"কোডের মেয়াদ শেষ বা কোড নেই। নতুন কোড চান।",
+ e_bad_code:"কোড ভুল।", e_bad_login:"ইমেইল বা পাসওয়ার্ড ভুল।", e_locked:"ভুল চেষ্টার কারণে অ্যাকাউন্ট সাময়িকভাবে বন্ধ। 5 মিনিট পরে চেষ্টা করুন।",
+ e_not_configured:"অ্যাকাউন্ট এখনও খোলা হয়নি।", e_bad_password:"বর্তমান পাসওয়ার্ড ভুল।", e_free_ready:"গ্রাহকের উপহার তৈরি। আগে উপহার দিন।",
+ e_not_free:"গ্রাহকের কোনো উপহার তৈরি নেই।", e_not_found:"গ্রাহক পাওয়া যায়নি।", e_name:"গ্রাহকের নাম লিখুন।", e_phone:"মোবাইল নম্বর লিখুন।",
+ e_exists:"গ্রাহক আগেই রেজিস্টার করা আছে। আবার খুঁজুন।", e_generic:"কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+ e_disabled:"অ্যাকাউন্ট স্থগিত। সহায়তার সাথে যোগাযোগ করুন।", e_plan_expired:"সাবস্ক্রিপশনের মেয়াদ শেষ। সহায়তার সাথে যোগাযোগ করুন।"
+},
+fil:{
+ wait:"Sandali lang...", signupTitle:"Gumawa ng account", signupSub:"Mag-sign up gamit ang iyong email. Magpapadala kami ng confirmation code.", email:"Email",
+ pass6:"Password (hindi bababa sa 6 na character)", pass2:"Ulitin ang password", sendCode:"Ipadala ang code", codeTitle:"Ilagay ang confirmation code",
+ code6:"Code (6 na numero)", confirmSignup:"Kumpirmahin at gumawa ng account", back:"Bumalik", loginTitle:"Mag-log in", password:"Password",
+ login:"Mag-log in", forgotLink:"Nakalimutan ang password?", forgotTitle:"Nakalimutan ang password", forgotSub:"Ilagay ang email mo at magpapadala kami ng code para pumili ng bagong password.",
+ backLogin:"Bumalik sa log in", resetTitle:"Bagong password", newPass6:"Bagong password (hindi bababa sa 6 na character)", saveLogin:"I-save at mag-log in",
+ signupLink:"Gumawa ng account", loginLink:"Mag-log in",
+ tabSearch:"Hanapin at idagdag", tabList:"Mga customer", tabAcc:"Account ko", phonePh:"Mobile number ng customer", search:"Hanapin",
+ emptySearchLong:"Ilagay ang number ng customer at hanapin. Kung hindi pa rehistrado, maaari mo siyang irehistro at dagdagan ng tasa sa isang hakbang.", emptySearch:"Ilagay ang number ng customer at hanapin.",
+ listPh:"Maghanap ayon sa pangalan o number", changeTitle:"Palitan ang password", curPass:"Kasalukuyang password", save:"I-save", logout:"Mag-log out",
+ passMismatch:"Hindi magkapareho ang dalawang password.", scSub:"Nagpadala kami ng code sa {email}. Tingnan ang Spam kung hindi dumating.",
+ rsSub:"Kung rehistrado ang {email}, may ipapadalang code doon. Tingnan ang Spam kung hindi dumating.", left:"{n} na pagsubok na lang.",
+ pwChanged:"Napalitan na ang password.", sessionExpired:"Nag-expire na ang session. Mag-log in ulit.", setApi:"Ilagay ang link ng Web app sa API_URL sa loob ng file.",
+ free:"May nakahandang libreng regalo. Libre ang tasang ito.", progress1:"Nabilang ang {s} sa {n}. 1 tasa na lang para sa regalo.", progressN:"Nabilang ang {s} sa {n}. {left} tasa pa para sa regalo.",
+ totalCups:"Kabuuang tasa", gifts:"Mga regalo", remove:"Burahin ang customer", addCup:"Magdagdag ng tasa", claim:"Ibigay ang regalo", undo:"Bawiin ang huling tasa",
+ newCust:"Bagong customer", newCustSub:"Hindi pa rehistrado ang number na ito. Ilagay ang pangalan at irehistro kasama ang unang tasa.", custName:"Pangalan ng customer", registerCup:"Magrehistro + tasa",
+ registered:"Nairehistro si {name} at nadagdagan ng tasa.", confirmDel:"Permanenteng burahin si {name}?", noCupsUndo:"Walang tasang maaaring bawiin.", deleted:"Nabura si {name}.",
+ reachedGift:"Okay. Umabot na ang customer sa regalo!", cupAdded:"Nadagdagan ng tasa.", giftGiven:"Naibigay na ang regalo.", undone:"Nabawi na.",
+ count:"Mga customer: {n}", results:"Mga resulta: {n}", noResults:"Walang resulta.", noCustomers:"Wala pang customer. Magsimula sa tab na “Hanapin at idagdag”.",
+ badgeGift:"May regalo", totalShort:"Kabuuan {n}",
+ e_network:"Walang koneksyon sa server. Tingnan ang internet at subukan ulit.", e_server:"May problema sa server. Subukan ulit mamaya.", e_bad_request:"May problema sa request. Subukan ulit.",
+ e_bad_email:"Hindi wasto ang email.", e_weak_password:"Dapat hindi bababa sa 6 na character ang password.", e_not_allowed:"Hindi pinapayagang magrehistro ang email na ito.",
+ e_already_registered:"Nakarehistro na ang account. Mag-log in.", e_too_many:"Masyadong maraming pagsubok. Maghintay sandali at subukan ulit.", e_code_expired:"Nag-expire na o wala ang code. Humingi ng bago.",
+ e_bad_code:"Mali ang code.", e_bad_login:"Mali ang email o password.", e_locked:"Pansamantalang naka-lock ang account dahil sa maling pagsubok. Subukan ulit pagkalipas ng 5 minuto.",
+ e_not_configured:"Hindi pa nagagawa ang account.", e_bad_password:"Mali ang kasalukuyang password.", e_free_ready:"May nakahandang regalo ang customer. Ibigay muna ang regalo.",
+ e_not_free:"Walang nakahandang regalo ang customer.", e_not_found:"Hindi nahanap ang customer.", e_name:"Ilagay ang pangalan ng customer.", e_phone:"Ilagay ang mobile number.",
+ e_exists:"Rehistrado na ang customer. Hanapin ulit.", e_generic:"May nagkamali. Subukan ulit.",
+ e_disabled:"Naka-suspend ang account. Makipag-ugnayan sa support.", e_plan_expired:"Nag-expire na ang subscription. Makipag-ugnayan sa support."
+}
+};
+
+let LANG = 'ar';
+function t(k, v){
+  let s = (I18N[LANG] && I18N[LANG][k]) || I18N.ar[k] || k;
+  if (v) for (const x in v) s = s.split('{' + x + '}').join(v[x]);
+  return s;
+}
+const msg = e => t('e_' + e) !== 'e_' + e ? t('e_' + e) : t('e_generic');
+
+const $ = id => document.getElementById(id);
+const store = {
+  get(k){ try{ return localStorage.getItem(k) || ''; }catch(e){ return ''; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+function digits(s){ return String(s||'').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/\D/g,''); }
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+const emptyHtml = key => '<div class="empty" data-i18n="' + key + '">' + esc(t(key)) + '</div>';
+
+let toastT;
+function toast(text, bad){
+  const el = $('toast'); el.textContent = text; el.className = 'show' + (bad ? ' bad' : '');
+  clearTimeout(toastT); toastT = setTimeout(() => el.className = '', 3500);
+}
+
+async function api(action, data){
+  const body = JSON.stringify(Object.assign({ action, token: store.get('tok') }, data || {}));
+  try{
+    const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body });
+    return await r.json();
+  }catch(e){ return { ok:false, error:'network' }; }
+}
+// استدعاء بعد الدخول: لو الجلسة انتهت يرجع لشاشة الدخول
+async function call(action, data){
+  const r = await api(action, data);
+  if (r.error === 'unauthorized'){ store.del('tok'); showAuth('pLogin'); toast(t('sessionExpired'), true); }
+  return r;
+}
+function busy(btn, on){
+  btn.disabled = on;
+  if (btn.dataset.i18n) btn.textContent = on ? t('wait') : t(btn.dataset.i18n);
+}
+
+/* ===== اللغة ===== */
+let pendEmail = '';
+function renderSubs(){
+  if (!pendEmail) return;
+  $('scSub').textContent = t('scSub', { email: pendEmail });
+  $('rsSub').textContent = t('rsSub', { email: pendEmail });
+}
+function applyLang(l){
+  LANG = I18N[l] ? l : 'ar'; store.set('lang', LANG);
+  const d = document.documentElement; d.lang = LANG; d.dir = RTL.includes(LANG) ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(e => e.textContent = t(e.dataset.i18n));
+  document.querySelectorAll('[data-ph]').forEach(e => e.placeholder = t(e.dataset.ph));
+  document.querySelectorAll('[data-aria]').forEach(e => e.setAttribute('aria-label', t(e.dataset.aria)));
+  document.querySelectorAll('.err').forEach(e => e.textContent = '');
+  $('lang').value = LANG;
+  renderSubs();
+  if (!$('vApp').classList.contains('hidden')){
+    renderList();
+    if (current && current.name) showCustomer(current);
+    else if (current && current.phone && $('fNew') && !$('nn').value) showNew(current.phone);
+  }
+}
+(function buildLang(){
+  const s = $('lang');
+  s.innerHTML = Object.keys(LANGS).map(k => '<option value="' + k + '">' + LANGS[k] + '</option>').join('');
+  s.addEventListener('change', () => applyLang(s.value));
+})();
+
+/* ===== العرض ===== */
+let cafeName = 'جرعة خفيفة';
+function setName(n){ cafeName = n || cafeName || 'جرعة خفيفة'; document.querySelectorAll('.cafeName').forEach(e => e.textContent = cafeName); $('loadName').textContent = cafeName; document.title = cafeName + ' | Light Dose'; }
+function show(id){ ['vLoad','vAuth','vApp'].forEach(v => $(v).classList.toggle('hidden', v !== id)); }
+function panel(id){ ['pSignup','pSignupCode','pLogin','pForgot','pReset'].forEach(p => $(p).classList.toggle('hidden', p !== id)); document.querySelectorAll('.err').forEach(e => e.textContent=''); }
+function showAuth(p){ show('vAuth'); panel(p); }
+document.querySelectorAll('[data-go]').forEach(a => {
+  const go = () => panel(a.dataset.go);
+  a.addEventListener('click', go);
+  a.addEventListener('keydown', e => { if (e.key==='Enter' || e.key===' '){ e.preventDefault(); go(); } });
+});
+
+let customers = [];
+let current = null;   // العميل المعروض
+function enterApp(){
+  show('vApp'); tab('tSearch'); current = null;
+  $('q').value=''; $('result').innerHTML = emptyHtml('emptySearchLong');
+  loadList();
+}
+function tab(id){
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
+  ['tSearch','tList','tAcc'].forEach(s => $(s).classList.toggle('hidden', s !== id));
+  if (id === 'tList') loadList();
+  if (id === 'tSearch') $('q').focus();
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => tab(b.dataset.tab)));
+
+/* ===== إنشاء حساب ===== */
+$('pSignup').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('suEmail').value.trim(), p1 = $('suPass').value, p2 = $('suPass2').value;
+  if (p1.length < 6) return $('suErr').textContent = msg('weak_password');
+  if (p1 !== p2) return $('suErr').textContent = t('passMismatch');
+  busy($('suBtn'), true);
+  const r = await api('signupStart', { email, password: p1 });
+  busy($('suBtn'), false);
+  if (!r.ok){
+    if (r.error === 'already_registered'){ $('liEmail').value = email; showAuth('pLogin'); return toast(msg('already_registered'), true); }
+    return $('suErr').textContent = msg(r.error);
+  }
+  pendEmail = email; renderSubs();
+  $('scCode').value = ''; panel('pSignupCode'); $('scCode').focus();
+});
+$('pSignupCode').addEventListener('submit', async e => {
+  e.preventDefault();
+  busy($('scBtn'), true);
+  const r = await api('signupConfirm', { email: pendEmail, code: digits($('scCode').value) });
+  busy($('scBtn'), false);
+  if (!r.ok) return $('scErr').textContent = msg(r.error);
+  store.set('tok', r.token); setName(r.name); enterApp();
+});
+
+/* ===== دخول ===== */
+$('pLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  busy($('liBtn'), true);
+  const r = await api('login', { email: $('liEmail').value.trim(), password: $('liPass').value });
+  busy($('liBtn'), false);
+  if (!r.ok){
+    let m = msg(r.error);
+    if (r.error === 'bad_login' && r.left != null) m += ' ' + t('left', { n: r.left });
+    return $('liErr').textContent = m;
+  }
+  $('liPass').value = ''; store.set('tok', r.token); setName(r.name); enterApp();
+});
+
+/* ===== نسيت كلمة السر ===== */
+$('pForgot').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('fgEmail').value.trim();
+  busy($('fgBtn'), true);
+  const r = await api('resetStart', { email });
+  busy($('fgBtn'), false);
+  if (!r.ok) return $('fgErr').textContent = msg(r.error);
+  pendEmail = email; renderSubs();
+  $('rsCode').value=''; $('rsPass').value=''; panel('pReset'); $('rsCode').focus();
+});
+$('pReset').addEventListener('submit', async e => {
+  e.preventDefault();
+  busy($('rsBtn'), true);
+  const r = await api('resetConfirm', { email: pendEmail, code: digits($('rsCode').value), password: $('rsPass').value });
+  busy($('rsBtn'), false);
+  if (!r.ok) return $('rsErr').textContent = msg(r.error);
+  store.set('tok', r.token); setName(r.name); enterApp(); toast(t('pwChanged'));
+});
+
+/* ===== بحث وإضافة ===== */
+async function loadList(){
+  const r = await call('list');
+  if (r.ok){ customers = r.customers; renderList(); }
+  return r.ok;
+}
+$('fSearch').addEventListener('submit', async e => {
+  e.preventDefault();
+  const ph = digits($('q').value);
+  if (!ph) return toast(msg('phone'), true);
+  busy($('qBtn'), true);
+  const ok = await loadList();
+  busy($('qBtn'), false);
+  if (!ok) return toast(msg('network'), true);
+  const c = customers.find(x => x.phone === ph);
+  if (c) showCustomer(c); else showNew(ph);
+});
+
+function cupsHtml(c){
+  let h = '<div class="cups" aria-hidden="true">';
+  for (let i=0;i<NEED;i++) h += '<div class="cup' + (i < c.stamps ? ' on' : '') + '"><svg><use href="#i-cup"/></svg></div>';
+  h += '<div class="cup gift' + (c.free ? ' on' : '') + '"><svg><use href="#i-gift"/></svg></div></div>';
+  return h;
+}
+function showCustomer(c){
+  current = c;
+  const left = NEED - c.stamps;
+  const state = c.free ? t('free') : (left === 1 ? t('progress1', { s:c.stamps, n:NEED }) : t('progressN', { s:c.stamps, n:NEED, left:left }));
+  $('result').innerHTML =
+    '<div class="card' + (c.free ? ' free' : '') + '">' +
+      '<div class="who"><b>' + esc(c.name) + '</b><span>' + esc(c.phone) + '</span></div>' +
+      cupsHtml(c) +
+      '<div class="state">' + esc(state) + '</div>' +
+      '<div class="stats"><span>' + esc(t('totalCups')) + ': <b>' + c.total + '</b></span><span>' + esc(t('gifts')) + ': <b>' + c.gifts + '</b></span></div>' +
+      '<div class="acts">' +
+        (c.free ? '<button class="gift wide" data-a="claim">' + esc(t('claim')) + '</button>'
+                : '<button class="wide" data-a="addCup">' + esc(t('addCup')) + '</button>') +
+        '<button class="ghost" data-a="undo">' + esc(t('undo')) + '</button>' +
+        '<button class="danger" data-a="remove">' + esc(t('remove')) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+function showNew(ph){
+  current = { phone: ph };
+  $('result').innerHTML =
+    '<form class="card" id="fNew">' +
+      '<div class="who"><b>' + esc(t('newCust')) + '</b><span>' + esc(ph) + '</span></div>' +
+      '<p class="state">' + esc(t('newCustSub')) + '</p>' +
+      '<label for="nn" style="margin-top:0">' + esc(t('custName')) + '</label>' +
+      '<input id="nn" maxlength="60" autocomplete="off" required>' +
+      '<button class="main" style="width:100%;margin-top:14px" type="submit" id="nnBtn" data-i18n="registerCup">' + esc(t('registerCup')) + '</button>' +
+    '</form>';
+  $('nn').focus();
+  $('fNew').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = $('nn').value.trim(); if (!name) return;
+    busy($('nnBtn'), true);
+    const r = await call('registerAdd', { phone: ph, name });
+    busy($('nnBtn'), false);
+    if (!r.ok) return toast(msg(r.error), true);
+    toast(t('registered', { name }));
+    $('q').value = ''; current = null;
+    $('result').innerHTML = emptyHtml('emptySearch');
+    loadList(); $('q').focus();
+  });
+}
+$('result').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-a]'); if (!b || !current) return;
+  const a = b.dataset.a;
+  if (a === 'remove' && !confirm(t('confirmDel', { name: current.name }))) return;
+  if (a === 'undo' && current.stamps === 0 && !current.free) return toast(t('noCupsUndo'), true);
+  b.disabled = true;
+  const r = await call(a, { phone: current.phone });
+  b.disabled = false;
+  if (!r.ok) return toast(msg(r.error), true);
+  if (a === 'remove'){
+    toast(t('deleted', { name: current.name })); current = null;
+    $('result').innerHTML = emptyHtml('emptySearch'); $('q').value=''; loadList(); return;
+  }
+  const c = r.customer; showCustomer(c);
+  const i = customers.findIndex(x => x.phone === c.phone); if (i >= 0) customers[i] = c; renderList();
+  if (a === 'addCup') toast(c.free ? t('reachedGift') : t('cupAdded'));
+  if (a === 'claim') toast(t('giftGiven'));
+  if (a === 'undo') toast(t('undone'));
+});
+
+/* ===== قائمة العملاء ===== */
+function renderList(){
+  const f = digits($('lf').value) || ''; const q = $('lf').value.trim().toLowerCase();
+  let rows = customers.slice().sort((a,b) => a.name.localeCompare(b.name));
+  if (q) rows = rows.filter(c => c.name.toLowerCase().includes(q) || (f && c.phone.includes(f)));
+  $('lcount').textContent = customers.length ? (t('count', { n: customers.length }) + (q ? ' · ' + t('results', { n: rows.length }) : '')) : '';
+  if (!rows.length){ $('llist').innerHTML = '<div class="empty">' + esc(customers.length ? t('noResults') : t('noCustomers')) + '</div>'; return; }
+  $('llist').innerHTML = rows.map(c =>
+    '<button class="row" data-ph="' + esc(c.phone) + '"><span><span class="nm">' + esc(c.name) + '</span><span class="ph">' + esc(c.phone) + '</span></span>' +
+    '<span class="meta">' + (c.free ? '<span class="badge">' + esc(t('badgeGift')) + '</span>' : c.stamps + ' / ' + NEED) + '<br>' + esc(t('totalShort', { n: c.total })) + '</span></button>'
+  ).join('');
+}
+$('lf').addEventListener('input', renderList);
+$('llist').addEventListener('click', e => {
+  const r = e.target.closest('.row'); if (!r) return;
+  tab('tSearch'); $('q').value = r.dataset.ph;
+  const c = customers.find(x => x.phone === r.dataset.ph); if (c) showCustomer(c);
+});
+
+/* ===== الحساب ===== */
+$('pChange').addEventListener('submit', async e => {
+  e.preventDefault();
+  busy($('cpBtn'), true);
+  const r = await call('changePassword', { oldPassword: $('cpOld').value, newPassword: $('cpNew').value });
+  busy($('cpBtn'), false);
+  if (!r.ok) return $('cpErr').textContent = msg(r.error);
+  store.set('tok', r.token); $('cpOld').value=''; $('cpNew').value=''; $('cpErr').textContent=''; toast(t('pwChanged'));
+});
+$('outBtn').addEventListener('click', async () => {
+  await api('logout'); store.del('tok'); customers = []; current = null; showAuth('pLogin');
+});
+
+/* ===== البداية ===== */
+function loadMsg(key){ const p = document.querySelector('#vLoad p:last-child'); p.dataset.i18n = key; p.textContent = t(key); }
+(async function init(){
+  const saved = store.get('lang');
+  applyLang(saved && I18N[saved] ? saved : 'ar');
+  if (!API_URL || API_URL.indexOf('PASTE') === 0){ show('vLoad'); loadMsg('setApi'); return; }
+  const s = await api('status');
+  if (!s.ok){ loadMsg('e_network'); return; }
+  setName(s.name);
+  if (store.get('tok')){
+    const r = await api('list');
+    if (r.ok){ customers = r.customers; show('vApp'); tab('tSearch'); renderList(); return; }
+    store.del('tok');
+  }
+  showAuth(s.configured ? 'pLogin' : 'pSignup');
+})();
+</script>
+</body>
+</html>

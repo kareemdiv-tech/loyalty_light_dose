@@ -1,0 +1,414 @@
+/**
+ * جرعة خفيفة | Light Dose — سيرفر (Google Apps Script) متوافق مع صفحة light-dose.html
+ * حسابات بالإيميل. كل حساب له شيت عملاء منفصل. تأكيد الإيميل واسترجاع كلمة السر بكود على الإيميل.
+ *
+ * الإعداد (مرة واحدة):
+ * 1) أنشئ Google Sheet جديد باسم "Light Dose Master" → Extensions → Apps Script → الصق الملف ده.
+ * 2) شغّل الدالة setup (وافق على الصلاحيات).
+ * 3) Deploy → New deployment → Web app → Execute as: Me → Who has access: Anyone → انسخ الرابط
+ *    وحطه في API_URL جوه ملف light-dose.html.
+ *
+ * التحكم في مين يسجل: ضع إيميلات العملاء في ALLOWED_EMAILS. لو سبتها فاضية أي حد يقدر يسجل.
+ * أي تعديل في الكود بعد النشر لازم تعمل Deploy جديد (Manage deployments ← Edit ← New version).
+ *
+ * إدارة (اكتب القيم في الثوابت اللي تحت ثم شغّل الدالة):
+ * adminResetPassword / adminDisableCafe / adminEnableCafe / adminSetPaidUntil / adminListCafes
+ */
+
+const BRAND_NAME = 'جرعة خفيفة';
+const ALLOWED_EMAILS = [];     // مثال: ['owner@gmail.com', 'cafe2@gmail.com'] ، فاضية = أي حد
+const NEED = 4;                // بعد 4 كبايات الخامسة هدية
+const MAX_FAILS = 5;           // محاولات غلط قبل القفل المؤقت (لكل إيميل)
+const LOCK_SECONDS = 300;
+const SESSION_SECONDS = 6 * 60 * 60;
+const CODE_TTL = 900;          // صلاحية أكواد الإيميل (15 دقيقة)
+const BACKUP_DAYS = 30;
+
+// إدارة
+const ADMIN_EMAIL = '';
+const ADMIN_NEW_PASSWORD = '';
+const ADMIN_PAID_UNTIL = '';   // مثال '2026-12-31' ، فاضية = بدون انتهاء
+
+const CAFES = 'Cafes', CUST = 'Customers', LOG = 'Log';
+const CAFE_HEAD = ['cafeId', 'name', 'email', 'salt', 'hash', 'sheetId', 'active', 'paidUntil', 'created'];
+const CUST_HEAD = ['phone', 'name', 'stamps', 'total', 'gifts', 'free', 'created', 'updated'];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/* ================= إعداد وإدارة ================= */
+function setup() {
+  cafes_();
+  installBackupTrigger();
+}
+
+function installBackupTrigger() {
+  ScriptApp.getProjectTriggers()
+    .filter(t => t.getHandlerFunction() === 'dailyBackup')
+    .forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('dailyBackup').timeBased().everyDays(1).atHour(4).create();
+  dailyBackup();
+}
+
+function dailyBackup() {
+  const it = DriveApp.getFoldersByName('Loyalty Backups');
+  const folder = it.hasNext() ? it.next() : DriveApp.createFolder('Loyalty Backups');
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  DriveApp.getFileById(master_().getId()).makeCopy('Backup MASTER ' + stamp, folder);
+  const v = cafes_().getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) {
+    if (!v[i][5]) continue;
+    try { DriveApp.getFileById(String(v[i][5])).makeCopy('Backup ' + v[i][0] + ' ' + stamp, folder); }
+    catch (e) { console.error(e); }
+  }
+  const cutoff = Date.now() - BACKUP_DAYS * 86400000;
+  const fi = folder.getFiles();
+  while (fi.hasNext()) {
+    const f = fi.next();
+    if (f.getDateCreated().getTime() < cutoff) f.setTrashed(true);
+  }
+}
+
+function mustCafe_() {
+  const f = findByEmail_(normEmail_(ADMIN_EMAIL));
+  if (!f) throw new Error('اكتب ADMIN_EMAIL صح (إيميل الحساب)');
+  f.id = String(f.row[0]);
+  return f;
+}
+function adminResetPassword() {
+  const f = mustCafe_();
+  if (ADMIN_NEW_PASSWORD.length < 6) throw new Error('كلمة السر 6 حروف على الأقل');
+  const salt = Utilities.getUuid();
+  f.sh.getRange(f.i + 1, 4, 1, 2).setValues([[salt, hash_(ADMIN_NEW_PASSWORD, salt)]]);
+  revoke_(f.id);
+  const cache = CacheService.getScriptCache(), k = emailKey_(normEmail_(ADMIN_EMAIL));
+  cache.remove('fails_' + k); cache.remove('locked_' + k);
+}
+function adminDisableCafe() { const f = mustCafe_(); f.sh.getRange(f.i + 1, 7).setValue(0); revoke_(f.id); }
+function adminEnableCafe() { const f = mustCafe_(); f.sh.getRange(f.i + 1, 7).setValue(1); }
+function adminSetPaidUntil() { const f = mustCafe_(); f.sh.getRange(f.i + 1, 8).setValue(ADMIN_PAID_UNTIL); }
+function adminListCafes() {
+  const v = cafes_().getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) Logger.log([v[i][0], v[i][2], 'active=' + v[i][6], 'paidUntil=' + v[i][7]].join(' | '));
+}
+
+/* ================= نقطة الدخول ================= */
+function doGet() { return out_({ ok: true, msg: 'light dose api' }); }
+
+function doPost(e) {
+  let req;
+  try { req = JSON.parse(e.postData.contents); } catch (err) { return out_({ ok: false, error: 'bad_request' }); }
+  try {
+    switch (req.action) {
+      case 'status': return out_({ ok: true, name: BRAND_NAME, configured: true });
+      case 'login': return out_(login_(req));
+      case 'signupStart': return out_(signupStart_(req));
+      case 'signupConfirm': return out_(signupConfirm_(req));
+      case 'resetStart': return out_(resetStart_(req));
+      case 'resetConfirm': return out_(resetConfirm_(req));
+      case 'logout':
+        CacheService.getScriptCache().remove('tok_' + req.token);
+        return out_({ ok: true });
+    }
+    const cafeId = checkToken_(req.token);
+    if (!cafeId) return out_({ ok: false, error: 'unauthorized' });
+    const lock = LockService.getScriptLock();
+    lock.waitLock(20000);
+    try {
+      if (req.action === 'changePassword') return out_(changePassword_(cafeId, req));
+      return out_(handle_(cafeId, req));
+    } finally { lock.releaseLock(); }
+  } catch (err) {
+    console.error(err);
+    return out_({ ok: false, error: 'server' });
+  }
+}
+function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+/* ================= أدوات عامة ================= */
+function master_() { return SpreadsheetApp.getActiveSpreadsheet(); }
+function cafes_() {
+  const ss = master_();
+  let sh = ss.getSheetByName(CAFES);
+  if (!sh) {
+    sh = ss.insertSheet(CAFES);
+    ['A', 'C', 'D', 'E', 'F', 'H'].forEach(c => sh.getRange(c + ':' + c).setNumberFormat('@'));
+    sh.appendRow(CAFE_HEAD);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function hash_(pw, salt) {
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + pw, Utilities.Charset.UTF_8);
+  return bytes.map(b => ('0' + (b & 0xff).toString(16)).slice(-2)).join('');
+}
+function normEmail_(x) { return String(x || '').trim().toLowerCase(); }
+function emailKey_(email) { return hash_(email, 'ek').slice(0, 32); }
+function code6_() { return String(Math.floor(100000 + Math.random() * 900000)); }
+function mail_(to, subject, body) { MailApp.sendEmail({ to: to, subject: subject, body: body, name: BRAND_NAME }); }
+function isAllowed_(email) {
+  if (!ALLOWED_EMAILS.length) return true;
+  return ALLOWED_EMAILS.map(normEmail_).indexOf(email) >= 0;
+}
+
+function findByEmail_(email) {
+  if (!email) return null;
+  const sh = cafes_();
+  const v = sh.getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) if (String(v[i][2]).toLowerCase() === email) return { sh: sh, i: i, row: v[i] };
+  return null;
+}
+function findById_(id) {
+  if (!id) return null;
+  const sh = cafes_();
+  const v = sh.getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) if (String(v[i][0]) === id) return { sh: sh, i: i, row: v[i] };
+  return null;
+}
+function cafeObj_(r) {
+  const pu = r[7] instanceof Date ? Utilities.formatDate(r[7], 'UTC', 'yyyy-MM-dd') : String(r[7] || '');
+  return { id: String(r[0]), name: String(r[1]), email: String(r[2]), salt: String(r[3]), hash: String(r[4]),
+           sheetId: String(r[5]), active: Number(r[6]) === 1, paidUntil: pu };
+}
+function planExpired_(c) {
+  if (!c.paidUntil) return false;
+  const d = new Date(c.paidUntil + 'T23:59:59');
+  return !isNaN(d) && d < new Date();
+}
+function newCafeId_() {
+  for (let k = 0; k < 5; k++) {
+    const id = Utilities.getUuid().replace(/-/g, '').slice(0, 8);
+    if (!findById_(id)) return id;
+  }
+  throw new Error('id');
+}
+
+/* ================= الجلسات ================= */
+function issueToken_(cafeId) {
+  const token = Utilities.getUuid() + Utilities.getUuid();
+  CacheService.getScriptCache().put('tok_' + token, cafeId + '|' + Date.now(), SESSION_SECONDS);
+  return token;
+}
+function checkToken_(token) {
+  if (!token) return null;
+  const cache = CacheService.getScriptCache();
+  const v = cache.get('tok_' + token);
+  if (!v) return null;
+  const p = v.split('|');
+  if (Number(p[1]) < Number(cache.get('rev_' + p[0]) || 0)) return null;
+  return p[0];
+}
+function revoke_(cafeId) { CacheService.getScriptCache().put('rev_' + cafeId, String(Date.now()), SESSION_SECONDS); }
+
+/* ================= الحسابات ================= */
+function login_(req) {
+  const email = normEmail_(req.email), cache = CacheService.getScriptCache(), k = emailKey_(email);
+  if (cache.get('locked_' + k)) return { ok: false, error: 'locked' };
+  const pw = typeof req.password === 'string' ? req.password : '';
+  const f = findByEmail_(email);
+  if (f) {
+    const c = cafeObj_(f.row);
+    if (hash_(pw, c.salt) === c.hash) {
+      if (!c.active) return { ok: false, error: 'disabled' };
+      if (planExpired_(c)) return { ok: false, error: 'plan_expired' };
+      cache.remove('fails_' + k);
+      return { ok: true, token: issueToken_(c.id), name: BRAND_NAME };
+    }
+  }
+  const n = Number(cache.get('fails_' + k) || 0) + 1;
+  if (n >= MAX_FAILS) {
+    cache.put('locked_' + k, '1', LOCK_SECONDS);
+    cache.remove('fails_' + k);
+    return { ok: false, error: 'locked' };
+  }
+  cache.put('fails_' + k, String(n), 900);
+  return { ok: false, error: 'bad_login', left: MAX_FAILS - n };
+}
+
+function signupStart_(req) {
+  const email = normEmail_(req.email);
+  const pw = String(req.password || '');
+  if (!EMAIL_RE.test(email)) return { ok: false, error: 'bad_email' };
+  if (pw.length < 6) return { ok: false, error: 'weak_password' };
+  if (!isAllowed_(email)) return { ok: false, error: 'not_allowed' };
+  if (findByEmail_(email)) return { ok: false, error: 'already_registered' };
+  const cache = CacheService.getScriptCache(), k = emailKey_(email);
+  const g = Number(cache.get('sustart') || 0), e = Number(cache.get('sue_' + k) || 0);
+  if (g >= 30 || e >= 3) return { ok: false, error: 'too_many' };
+  cache.put('sustart', String(g + 1), 3600);
+  cache.put('sue_' + k, String(e + 1), 3600);
+  const code = code6_(), salt = Utilities.getUuid();
+  cache.put('su_' + k, JSON.stringify({ email: email, salt: salt, hash: hash_(pw, salt), code: code, tries: 0 }), CODE_TTL);
+  mail_(email, 'كود تفعيل - ' + BRAND_NAME,
+    'كود التفعيل بتاعك: ' + code + '\nصالح لمدة 15 دقيقة.\nلو مطلبتش ده تجاهل الرسالة.');
+  return { ok: true };
+}
+
+function signupConfirm_(req) {
+  const email = normEmail_(req.email), cache = CacheService.getScriptCache(), k = emailKey_(email);
+  const key = 'su_' + k;
+  const raw = cache.get(key);
+  if (!raw) return { ok: false, error: 'code_expired' };
+  const p = JSON.parse(raw);
+  if (String(req.code || '').trim() !== p.code) {
+    p.tries++;
+    if (p.tries >= 5) { cache.remove(key); return { ok: false, error: 'too_many' }; }
+    cache.put(key, JSON.stringify(p), CODE_TTL);
+    return { ok: false, error: 'bad_code' };
+  }
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    if (findByEmail_(p.email)) return { ok: false, error: 'already_registered' };
+    const id = newCafeId_();
+    const ss = SpreadsheetApp.create('Loyalty - ' + p.email);
+    const sh = ss.getSheets()[0];
+    sh.setName(CUST);
+    sh.getRange('A:A').setNumberFormat('@');
+    sh.appendRow(CUST_HEAD);
+    sh.setFrozenRows(1);
+    const lg = ss.insertSheet(LOG);
+    lg.getRange('B:B').setNumberFormat('@');
+    lg.appendRow(['time', 'phone', 'name', 'action']);
+    lg.setFrozenRows(1);
+    cafes_().appendRow([id, BRAND_NAME, p.email, p.salt, p.hash, ss.getId(), 1, '', new Date()]);
+    cache.remove(key);
+    return { ok: true, name: BRAND_NAME, token: issueToken_(id) };
+  } finally { lock.releaseLock(); }
+}
+
+// لا نكشف هل الإيميل مسجل أم لا: الرد دايماً ok
+function resetStart_(req) {
+  const email = normEmail_(req.email), cache = CacheService.getScriptCache(), k = emailKey_(email);
+  if (!EMAIL_RE.test(email)) return { ok: false, error: 'bad_email' };
+  const n = Number(cache.get('fgt_' + k) || 0);
+  if (n >= 3) return { ok: false, error: 'too_many' };
+  cache.put('fgt_' + k, String(n + 1), 3600);
+  if (findByEmail_(email)) {
+    const code = code6_();
+    cache.put('rc_' + k, JSON.stringify({ code: code, tries: 0 }), CODE_TTL);
+    mail_(email, 'استرجاع كلمة السر - ' + BRAND_NAME,
+      'كود استرجاع كلمة السر: ' + code + '\nصالح لمدة 15 دقيقة.\nلو مطلبتش ده تجاهل الرسالة.');
+  }
+  return { ok: true };
+}
+
+function resetConfirm_(req) {
+  const email = normEmail_(req.email), cache = CacheService.getScriptCache(), k = emailKey_(email);
+  const raw = cache.get('rc_' + k);
+  if (!raw) return { ok: false, error: 'code_expired' };
+  const p = JSON.parse(raw);
+  const pw = String(req.password || '');
+  if (pw.length < 6) return { ok: false, error: 'weak_password' };
+  if (String(req.code || '').trim() !== p.code) {
+    p.tries++;
+    if (p.tries >= 5) { cache.remove('rc_' + k); return { ok: false, error: 'too_many' }; }
+    cache.put('rc_' + k, JSON.stringify(p), CODE_TTL);
+    return { ok: false, error: 'bad_code' };
+  }
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const f = findByEmail_(email);
+    if (!f) return { ok: false, error: 'bad_code' };
+    const c = cafeObj_(f.row);
+    const salt = Utilities.getUuid();
+    f.sh.getRange(f.i + 1, 4, 1, 2).setValues([[salt, hash_(pw, salt)]]);
+    revoke_(c.id);
+    cache.remove('rc_' + k); cache.remove('fails_' + k); cache.remove('locked_' + k);
+    if (!c.active) return { ok: false, error: 'disabled' };
+    if (planExpired_(c)) return { ok: false, error: 'plan_expired' };
+    return { ok: true, token: issueToken_(c.id), name: BRAND_NAME };
+  } finally { lock.releaseLock(); }
+}
+
+function changePassword_(cafeId, req) {
+  const f = findById_(cafeId);
+  if (!f) return { ok: false, error: 'not_found' };
+  const c = cafeObj_(f.row);
+  if (hash_(String(req.oldPassword || ''), c.salt) !== c.hash) return { ok: false, error: 'bad_password' };
+  const pw = String(req.newPassword || '');
+  if (pw.length < 6) return { ok: false, error: 'weak_password' };
+  const salt = Utilities.getUuid();
+  f.sh.getRange(f.i + 1, 4, 1, 2).setValues([[salt, hash_(pw, salt)]]);
+  revoke_(cafeId);
+  return { ok: true, token: issueToken_(cafeId) };
+}
+
+/* ================= بيانات العملاء (شيت منفصل لكل حساب) ================= */
+function sheetIdOf_(cafeId) {
+  const cache = CacheService.getScriptCache();
+  let sid = cache.get('sid_' + cafeId);
+  if (!sid) {
+    const f = findById_(cafeId);
+    if (!f) return null;
+    sid = String(f.row[5]);
+    cache.put('sid_' + cafeId, sid, SESSION_SECONDS);
+  }
+  return sid;
+}
+
+function toObj_(r) {
+  return { phone: String(r[0]), name: String(r[1]), stamps: Number(r[2]) || 0, total: Number(r[3]) || 0,
+           gifts: Number(r[4]) || 0, free: Number(r[5]) === 1 };
+}
+
+function handle_(cafeId, req) {
+  const sid = sheetIdOf_(cafeId);
+  if (!sid) return { ok: false, error: 'not_found' };
+  const ss = SpreadsheetApp.openById(sid);
+  const sh = ss.getSheetByName(CUST);
+  const v = sh.getDataRange().getValues();
+
+  if (req.action === 'list') {
+    return { ok: true, customers: v.slice(1).filter(r => r[0] !== '').map(toObj_) };
+  }
+
+  const phone = String(req.phone || '').replace(/\D/g, '');
+  if (!phone) return { ok: false, error: 'phone' };
+  let i = -1;
+  for (let k = 1; k < v.length; k++) if (String(v[k][0]) === phone) { i = k; break; }
+  const now = new Date();
+
+  // تسجيل عميل جديد مع أول كوباية في خطوة واحدة
+  if (req.action === 'registerAdd') {
+    if (i >= 0) return { ok: false, error: 'exists' };
+    const name = String(req.name || '').trim().slice(0, 60);
+    if (!name) return { ok: false, error: 'name' };
+    sh.appendRow([phone, name, 1, 1, 0, 0, now, now]);
+    log_(ss, phone, 'registerAdd', name);
+    return { ok: true, customer: { phone: phone, name: name, stamps: 1, total: 1, gifts: 0, free: false } };
+  }
+
+  if (i < 0) return { ok: false, error: 'not_found' };
+  const c = toObj_(v[i]);
+  switch (req.action) {
+    case 'addCup':
+      if (c.free) return { ok: false, error: 'free_ready' };
+      c.stamps++; c.total++;
+      if (c.stamps >= NEED) c.free = true;
+      break;
+    case 'claim':
+      if (!c.free) return { ok: false, error: 'not_free' };
+      c.free = false; c.stamps = 0; c.gifts++;
+      break;
+    case 'undo':
+      if (c.free) { c.free = false; c.stamps = NEED - 1; c.total = Math.max(0, c.total - 1); }
+      else if (c.stamps > 0) { c.stamps--; c.total = Math.max(0, c.total - 1); }
+      break;
+    case 'remove':
+      sh.deleteRow(i + 1);
+      log_(ss, phone, 'remove', c.name);
+      return { ok: true, removed: true };
+    default:
+      return { ok: false, error: 'bad_request' };
+  }
+  sh.getRange(i + 1, 3, 1, 4).setValues([[c.stamps, c.total, c.gifts, c.free ? 1 : 0]]);
+  sh.getRange(i + 1, 8).setValue(now);
+  log_(ss, phone, req.action, c.name);
+  return { ok: true, customer: c };
+}
+
+function log_(ss, phone, action, name) {
+  const lg = ss.getSheetByName(LOG);
+  if (lg) lg.appendRow([new Date(), String(phone), name, action]);
+}
